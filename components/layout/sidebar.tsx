@@ -12,6 +12,11 @@ const navItems = [
       { label: 'Book+Language Royalty', href: '/sales/book-language' },
     ],
   },
+  {
+    label: 'Config',
+    href: '/config',
+    children: [{ label: 'Summary', href: '/config/summary' }],
+  },
 ];
 
 export function Sidebar() {
