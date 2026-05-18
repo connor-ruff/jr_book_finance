@@ -3,7 +3,16 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const navItems = [{ label: 'Sales', href: '/sales' }];
+const navItems = [
+  {
+    label: 'Sales',
+    href: '/sales',
+    children: [
+      { label: 'Total Royalty', href: '/sales/total-royalty' },
+      { label: 'Book+Language Royalty', href: '/sales/book-language' },
+    ],
+  },
+];
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -17,20 +26,39 @@ export function Sidebar() {
       </div>
       <nav className="space-y-1 px-3">
         {navItems.map((item) => {
-          const active =
-            pathname === item.href || pathname.startsWith(item.href + '/');
+          const parentActive = pathname.startsWith(item.href);
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={
-                active
-                  ? 'block rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-white'
-                  : 'block rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100'
-              }
-            >
-              {item.label}
-            </Link>
+            <div key={item.href}>
+              <div
+                className={
+                  parentActive
+                    ? 'rounded-md px-3 py-2 text-sm font-medium text-slate-900'
+                    : 'rounded-md px-3 py-2 text-sm font-medium text-slate-500'
+                }
+              >
+                {item.label}
+              </div>
+              {item.children && (
+                <div className="ml-3 mt-0.5 space-y-0.5">
+                  {item.children.map((child) => {
+                    const active = pathname === child.href || pathname.startsWith(child.href + '/');
+                    return (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        className={
+                          active
+                            ? 'block rounded-md bg-slate-900 px-3 py-1.5 text-sm font-medium text-white'
+                            : 'block rounded-md px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100'
+                        }
+                      >
+                        {child.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           );
         })}
       </nav>
