@@ -74,7 +74,9 @@ export async function getConfigKenpRates(): Promise<ConfigKenpRate[]> {
      ORDER BY MONTH_BEGIN_DATE DESC, COUNTRY`,
   );
   return rows.map((r) => ({
-    monthBeginDate: toStr(r.MONTH_BEGIN_DATE).slice(0, 10),
+    monthBeginDate: r.MONTH_BEGIN_DATE instanceof Date
+      ? r.MONTH_BEGIN_DATE.toISOString().slice(0, 10)
+      : toStr(r.MONTH_BEGIN_DATE).slice(0, 10),
     country: toStr(r.COUNTRY),
     kenpRate: r.KENP_RATE == null ? null : toNum(r.KENP_RATE),
     isFinal: toBool(r.IS_FINAL),
@@ -88,7 +90,9 @@ export async function getConfigForexRates(): Promise<ConfigForexRate[]> {
      ORDER BY MONTH_BEGIN_DATE DESC, SOURCE_CURRENCY`,
   );
   return rows.map((r) => ({
-    monthBeginDate: toStr(r.MONTH_BEGIN_DATE).slice(0, 10),
+    monthBeginDate: r.MONTH_BEGIN_DATE instanceof Date
+      ? r.MONTH_BEGIN_DATE.toISOString().slice(0, 10)
+      : toStr(r.MONTH_BEGIN_DATE).slice(0, 10),
     sourceCurrency: toStr(r.SOURCE_CURRENCY),
     targetCurrency: toStr(r.TARGET_CURRENCY),
     exchangeRate: toNum(r.EXCHANGE_RATE),

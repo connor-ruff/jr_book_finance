@@ -39,6 +39,12 @@ function Td({ children, mono }: { children: React.ReactNode; mono?: boolean }) {
   );
 }
 
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fmtMonthYear(isoDate: string): string {
+  const [year, month] = isoDate.split('-');
+  return `${MONTHS[Number(month) - 1]}-${year.slice(2)}`;
+}
+
 function Badge({ value }: { value: boolean }) {
   return (
     <span
@@ -60,7 +66,7 @@ function TableCard({
   children,
 }: {
   title: string;
-  subtitle: string;
+  subtitle: React.ReactNode;
   rowCount: number;
   children: React.ReactNode;
 }) {
@@ -202,7 +208,7 @@ function KenpRatesTable({ rows }: { rows: ConfigKenpRate[] }) {
   return (
     <TableCard
       title="KENP Rates"
-      subtitle="CONFIG.KENP_RATES — Kindle Unlimited per-page royalty rates by country and month"
+      subtitle={<>CONFIG.KENP_RATES — Kindle Unlimited per-page royalty rates by country and month. Source: <a href="https://readerlinks.com/kenp_rates/index.php" target="_blank" rel="noreferrer" className="text-blue-600 underline hover:text-blue-800">readerlinks.com/kenp_rates</a></>}
       rowCount={rows.length}
     >
       <thead>
@@ -219,7 +225,7 @@ function KenpRatesTable({ rows }: { rows: ConfigKenpRate[] }) {
             .filter((r) => r.monthBeginDate === month)
             .map((r) => (
               <tr key={`${r.monthBeginDate}-${r.country}`} className="hover:bg-slate-50">
-                <Td mono>{r.monthBeginDate}</Td>
+                <Td mono>{fmtMonthYear(r.monthBeginDate)}</Td>
                 <Td>{r.country}</Td>
                 <Td mono>{r.kenpRate == null ? '—' : r.kenpRate.toFixed(7)}</Td>
                 <Td>
@@ -238,7 +244,7 @@ function ForexRatesTable({ rows }: { rows: ConfigForexRate[] }) {
   return (
     <TableCard
       title="Forex Rates"
-      subtitle="CONFIG.FOREX_RATES — Monthly exchange rates to USD for royalty normalization"
+      subtitle={<>CONFIG.FOREX_RATES — Monthly exchange rates to USD for royalty normalization. Source: <a href="https://www.x-rates.com/average/" target="_blank" rel="noreferrer" className="text-blue-600 underline hover:text-blue-800">x-rates.com/average</a></>}
       rowCount={rows.length}
     >
       <thead>
@@ -256,7 +262,7 @@ function ForexRatesTable({ rows }: { rows: ConfigForexRate[] }) {
             .filter((r) => r.monthBeginDate === month)
             .map((r) => (
               <tr key={`${r.monthBeginDate}-${r.sourceCurrency}`} className="hover:bg-slate-50">
-                <Td mono>{r.monthBeginDate}</Td>
+                <Td mono>{fmtMonthYear(r.monthBeginDate)}</Td>
                 <Td>
                   <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
                     {r.sourceCurrency}
