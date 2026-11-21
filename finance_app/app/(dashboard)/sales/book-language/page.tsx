@@ -15,11 +15,10 @@ import {
   Title,
 } from '@tremor/react';
 import {
-  DEFAULT_DAYS,
   MAX_BOOK_LANG_COMBOS,
   type Granularity,
   bucketLabel,
-  daysAgo,
+  defaultFromDate,
   fetchDailySales,
   fmtUSD,
   startOfToday,
@@ -30,14 +29,14 @@ import { GranularityToggle } from '../_granularity-toggle';
 
 export default function BookLanguagePage() {
   const [dateRange, setDateRange] = useState<DateRangePickerValue>({
-    from: daysAgo(DEFAULT_DAYS),
+    from: defaultFromDate(),
     to: startOfToday(),
   });
   const [selectedBooks, setSelectedBooks] = useState<string[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [granularity, setGranularity] = useState<Granularity>('day');
 
-  const from = dateRange.from ?? daysAgo(DEFAULT_DAYS);
+  const from = dateRange.from ?? defaultFromDate();
   const to = dateRange.to ?? startOfToday();
 
   const { data, isLoading, isFetching, error } = useQuery({

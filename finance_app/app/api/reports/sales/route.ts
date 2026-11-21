@@ -16,9 +16,9 @@ function toLocalIsoDate(d: Date): string {
 
 function defaultRange(): { from: string; to: string } {
   const today = new Date();
-  const ninetyAgo = new Date();
-  ninetyAgo.setDate(ninetyAgo.getDate() - 90);
-  return { from: toLocalIsoDate(ninetyAgo), to: toLocalIsoDate(today) };
+  // First of the month 3 months back: rolling quarter plus month-to-date
+  const start = new Date(today.getFullYear(), today.getMonth() - 3, 1);
+  return { from: toLocalIsoDate(start), to: toLocalIsoDate(today) };
 }
 
 export async function GET(request: Request) {

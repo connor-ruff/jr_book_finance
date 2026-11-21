@@ -10,6 +10,7 @@ const navItems = [
     children: [
       { label: 'Total Royalty', href: '/sales/total-royalty' },
       { label: 'Book+Language Royalty', href: '/sales/book-language' },
+      { label: 'Revenue by Source', href: '/sales/sale-source' },
     ],
   },
   {

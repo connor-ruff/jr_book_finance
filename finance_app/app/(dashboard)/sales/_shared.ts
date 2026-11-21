@@ -1,6 +1,6 @@
 import type { DailySaleRow, DailySalesResponse } from '@/lib/types/reports';
 
-export const DEFAULT_DAYS = 90;
+export const DEFAULT_MONTHS_BACK = 3;
 export const MAX_BOOK_LANG_COMBOS = 10;
 
 export function pad(n: number): string {
@@ -17,10 +17,15 @@ export function startOfToday(): Date {
   return d;
 }
 
-export function daysAgo(days: number): Date {
+// First day of the month, `months` months before the current month
+// (e.g. on Nov 20 with months=3 -> Aug 1): a rolling quarter plus month-to-date.
+export function startOfMonthsAgo(months: number): Date {
   const d = startOfToday();
-  d.setDate(d.getDate() - days);
-  return d;
+  return new Date(d.getFullYear(), d.getMonth() - months, 1);
+}
+
+export function defaultFromDate(): Date {
+  return startOfMonthsAgo(DEFAULT_MONTHS_BACK);
 }
 
 export function isoToShortLabel(iso: string): string {
