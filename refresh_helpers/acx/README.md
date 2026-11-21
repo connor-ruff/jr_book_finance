@@ -71,4 +71,42 @@ CALL ACX.MERGE_DATA_BY_FILE_MONTH_DATE_GENERAL('ACX.ADJUSTMENTS');
 
 ## Step 5: Update any dimensions
 
-**NOTE: this documentation is incomplete, as it is being filled out intermittedly while this pipeline is developed**
+Use the below SQL and the DML builder on Google Drive to add any necessary entries to the manual BOOK_VERSIONS insert statement.
+
+```sql
+WITH ALL_ENTRIES AS (
+    SELECT ROYALTY_EARNER, TITLE 
+    FROM ACX.ADJUSTMENTS
+    WHERE ROYALTY_EARNER <> 'Total'
+    UNION 
+    SELECT 
+        ROYALTY_EARNER, TITLE
+    FROM ACX.SALES_DETAIL_MEMBER_VALUE
+    UNION 
+    SELECT 
+        ROYALTY_EARNER, TITLE
+    FROM ACX.SALES_DETAIL_NET_SALES
+
+)
+SELECT 
+    ROYALTY_EARNER,
+    TITLE,
+    COUNT(*) OVER (PARTITION BY ROYALTY_EARNER) AS ENTRY_COUNT
+FROM ALL_ENTRIES AE 
+LEFT JOIN CONFIG.BOOK_VERSIONS BV ON BV.BOOK_VERSION_UNIQUE_ID = AE.ROYALTY_EARNER
+WHERE BV.BOOK_VERSION_UNIQUE_ID IS NULL 
+GROUP BY ROYALTY_EARNER, TITLE
+ORDER BY 1
+;
+```
+
+Paste that into the DML builder and fill in values
+
+
+## Step 6: Build All Reports
+
+Once all other sources are also updated/stage, we can rebuild the master reports:
+
+```sql
+CALL RPT.BUILD_ALL_REPORTS();
+```
