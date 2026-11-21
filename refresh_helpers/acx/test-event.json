@@ -1,0 +1,9 @@
+{
+  "source_bucket": "connors-misc-blob-for-blobs",
+  "source_key": "books/acx/excel_stage/",
+  "sheet_names": "Summary,Marketplace Breakdown by Title,Royalties by Title,Sales Detail (Net Sales),Sales Detail (Member Value)",
+  "dest_bucket": "connors-misc-blob-for-blobs",
+  "dest_folder": "books/acx/csv_stage/",
+  "processing_type": "whole-folder",
+  "move_after_operation": false
+}

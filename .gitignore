@@ -42,3 +42,5 @@ next-env.d.ts
 
 # Snowflake keys — never commit
 *.p8
+
+refresh_helpers/_downloaded_files/

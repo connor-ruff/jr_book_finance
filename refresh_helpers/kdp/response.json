@@ -1,0 +1,1 @@
+{"statusCode": 200, "body": "Converted 1 files (2 sheets each) from s3://connors-misc-blob-for-blobs/books/kdp/excel_stage/ → ['books/kdp/csv_stage/combined_sales/KDP_Orders-75f4a01f-9802-49ff-ade8-4585c15054c2-combined_sales.csv', 'books/kdp/csv_stage/kenp/KDP_Orders-75f4a01f-9802-49ff-ade8-4585c15054c2-kenp.csv']"}

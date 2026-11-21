@@ -1,0 +1,4 @@
+{
+    "statusCode": 200,
+    "body": "Converted 1 files (5 sheets each) from s3://connors-misc-blob-for-blobs/books/acx/excel_stage/ → ['books/acx/csv_stage/summary/Royalty_ACCT_Jenifer_Ruff_45906_ACX_MONTHLY_Mar_2026-summary.csv', 'books/acx/csv_stage/marketplace_breakdown_by_title/Royalty_ACCT_Jenifer_Ruff_45906_ACX_MONTHLY_Mar_2026-marketplace_breakdown_by_title.csv', 'books/acx/csv_stage/royalties_by_title/Royalty_ACCT_Jenifer_Ruff_45906_ACX_MONTHLY_Mar_2026-royalties_by_title.csv', 'books/acx/csv_stage/sales_detail_(net_sales)/Royalty_ACCT_Jenifer_Ruff_45906_ACX_MONTHLY_Mar_2026-sales_detail_(net_sales).csv', 'books/acx/csv_stage/sales_detail_(member_value)/Royalty_ACCT_Jenifer_Ruff_45906_ACX_MONTHLY_Mar_2026-sales_detail_(member_value).csv']"
+}

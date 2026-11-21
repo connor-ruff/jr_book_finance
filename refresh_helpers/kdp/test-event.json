@@ -1,0 +1,9 @@
+{
+  "source_bucket": "connors-misc-blob-for-blobs",
+  "source_key": "books/kdp/excel_stage/",
+  "sheet_names": "Combined Sales,KENP",
+  "dest_bucket": "connors-misc-blob-for-blobs",
+  "dest_folder": "books/kdp/csv_stage/",
+  "processing_type": "whole-folder",
+  "move_after_operation": true
+}
