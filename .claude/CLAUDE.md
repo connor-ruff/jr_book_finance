@@ -6,6 +6,15 @@ It is comprised of two primary things:
 - `refresh_helpers/` - various functions to help download and stage the latest data
 - `finance_app` - a web application that analyzes sales and ad expense data for the author Jen Ruff.
 
+Additionally, this repo serves as the central pwd for all work involving Jen Ruff finance. 
+Other relevant repos, which should be already injected into this claude session:
+- **connors_snowflake_db**: the snowflake ddl manager for the snowflake architecture 
+    - Note: this repo is for the entire account, but it is just the **books** database that is relevant for thsi proejct
+- **aws_iac_mngr**: the terraform iac repo for AWS resources relevant for this project
+    - Note: this repo also contains much much more than just objects for this project
+
+Note that each of these repos have their own CLAUDE.md file that may be useful when working in those repos
+
 # High-Level App Structure
 
 **Note: this section describes the contents of the `finance_app/` folder**

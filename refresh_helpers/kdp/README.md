@@ -76,6 +76,8 @@ From the `connors_snowflake_db` repo...
 
 ## Step 6: Build All Reports
 
+Once all other sources are also updated/stage, we can rebuild the master reports:
+
 ```sql
 CALL RPT.BUILD_ALL_REPORTS();
 ```
