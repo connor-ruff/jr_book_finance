@@ -44,3 +44,5 @@ next-env.d.ts
 *.p8
 
 refresh_helpers/_downloaded_files/
+
+TMP/
