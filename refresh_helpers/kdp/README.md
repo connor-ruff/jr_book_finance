@@ -1,5 +1,14 @@
 # How to Refresh KDP Data
 
+KDP makes royalty data available on a daily basis, with minor lag of a few days. 
+Royalties reports can be downloaded across a custom-set range of dates.
+Our refresh methodology is:
+
+- Download royalties files from a date range starting from the last royalty date available in Snowflake through the current date
+    - **Note: add a 3-4 day overlap to pick up any lagged royalties, the process is safe and will not duplicate records**
+- For any royalty date included in the new refresh batch, fully delete all records from that royalty date from Snowflake
+- Insert data from new batch
+
 ## Step 1: Check The Most-Recently Loaded Royalty Date
 
 In Snowflake:

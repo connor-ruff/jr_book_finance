@@ -5,5 +5,5 @@
   "dest_bucket": "connors-misc-blob-for-blobs",
   "dest_folder": "books/acx/csv_stage/",
   "processing_type": "whole-folder",
-  "move_after_operation": false
+  "move_after_operation": true
 }
