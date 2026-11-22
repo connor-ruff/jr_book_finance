@@ -48,11 +48,13 @@ export async function getDailySales(opts: {
   return rows.map((r) => ({
     bookSid: r.BOOK_SID,
     bookVersionSid: r.BOOK_VERSION_SID,
-    bookTitle: r.BOOK_TITLE,
-    saleSource: r.SALE_SOURCE,
-    versionType: r.VERSION_TYPE,
-    versionLanguage: r.VERSION_LANGUAGE,
-    marketplace: r.MARKETPLACE,
+    // Filter dimensions can be NULL when a source row has no mapping; the UI
+    // select components crash on null values, so label them instead.
+    bookTitle: r.BOOK_TITLE ?? 'Unknown',
+    saleSource: r.SALE_SOURCE ?? 'Unknown',
+    versionType: r.VERSION_TYPE ?? 'Unknown',
+    versionLanguage: r.VERSION_LANGUAGE ?? 'Unknown',
+    marketplace: r.MARKETPLACE ?? 'Unknown',
     royaltyDate: toIsoDate(r.ROYALTY_DATE),
     royaltyUsd: toNumber(r.ROYALTY_IN_USD),
     netUnitsSold: toNumber(r.NET_UNITS_SOLD),
