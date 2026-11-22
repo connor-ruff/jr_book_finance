@@ -29,7 +29,7 @@ SELECT MAX(DP_SOURCE_FILE_MONTH) FROM SPOT.ROYALTY_REPORT_ALL_TABS;
 - Log in to Spotify Authors
 - Navigate to "Royalty Reports"
 - Download all monthly reports that have not been processed previously
-- Move files to `refresh_helpers/_downloaded_files/spot/`
+- Move files to `refresh_helpers/_downloaded_files/spot/royalty/`
 
 ## Step 3: Push Files to S3
 
@@ -44,7 +44,7 @@ cd refresh_helpers/spot
 
 ```bash 
 cd refresh_helpers/spot
-./upload-file.sh ../_downloaded_files/spot/<file_name>.xlsx
+./upload-file.sh ../_downloaded_files/spot/royalty/<file_name>.xlsx
 ```
 
 - Trigger the lambda function that parses the excel file and converts to csv
