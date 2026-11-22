@@ -1,7 +1,7 @@
 {
   "source_bucket": "connors-misc-blob-for-blobs",
   "source_key": "books/acx/excel_stage/",
-  "sheet_names": "Summary,Sales Detail (Net Sales),Sales Detail (Member Value),Adjustments",
+  "include_sheet_names": "Summary,Sales Detail (Net Sales),Sales Detail (Member Value),Adjustments",
   "dest_bucket": "connors-misc-blob-for-blobs",
   "dest_folder": "books/acx/csv_stage/",
   "processing_type": "whole-folder",

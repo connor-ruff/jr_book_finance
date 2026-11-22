@@ -1,7 +1,7 @@
 {
   "source_bucket": "connors-misc-blob-for-blobs",
   "source_key": "books/inaud/excel_stage/",
-  "sheet_names": "Library,Retail,Subscription,Pool",
+  "exclude_sheet_names": "Summary",
   "dest_bucket": "connors-misc-blob-for-blobs",
   "dest_folder": "books/inaud/csv_stage/",
   "processing_type": "whole-folder",
