@@ -1,0 +1,1 @@
+aws sso login --profile connor-ruff-dev-acct
