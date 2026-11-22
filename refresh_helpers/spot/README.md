@@ -21,29 +21,30 @@ In Snowflake:
 USE ROLE BOOKS_ADMIN;
 USE SCHEMA BOOKS.CONFIG;
 USE WAREHOUSE COMPUTE_WH;
+SELECT MAX(DP_SOURCE_FILE_MONTH) FROM SPOT.ROYALTY_REPORT_ALL_TABS;
 ```
 
 ## Step 2: Download Royalty Statement(s)
 
-- Log in to InAudio (https://voices.inaudio.com/reporting/royalty-reports)
+- Log in to Spotify Authors
 - Navigate to "Royalty Reports"
 - Download all monthly reports that have not been processed previously
-- Move files to `refresh_helpers/_downloaded_files/inaud/`
+- Move files to `refresh_helpers/_downloaded_files/spot/`
 
 ## Step 3: Push Files to S3
 
 - Initiate AWS profile
 
 ```bash
-cd refresh_helpers/inaud
+cd refresh_helpers/spot
 ./aws-login.sh
 ```
 
 - Upload each excel file (do separately for each file you need to stage)
 
 ```bash 
-cd refresh_helpers/inaud
-./upload-file.sh ../_downloaded_files/inaud/<file_name>.xlsx
+cd refresh_helpers/spot
+./upload-file.sh ../_downloaded_files/spot/<file_name>.xlsx
 ```
 
 - Trigger the lambda function that parses the excel file and converts to csv
@@ -58,8 +59,8 @@ cd refresh_helpers/inaud
 USE ROLE BOOKS_ADMIN;
 USE SCHEMA BOOKS.CONFIG;
 USE WAREHOUSE COMPUTE_WH;
-CALL CONFIG.COPY_S3_TO_RAW_GENERAL('RAW.INAUD_ROYALTY_REPORT_ALL_TABS_STAGE');
-CALL INAUD.MERGE_ROYALTY_REPORT_ALL_TABS_GENERAL('INAUD.ROYALTY_REPORT_ALL_TABS');
+CALL CONFIG.COPY_S3_TO_RAW_GENERAL('RAW.SPOT_ROYALTY_REPORT_ALL_TABS_STAGE');
+CALL SPOT.MERGE_ROYALTY_REPORT_ALL_TABS_GENERAL('SPOT.ROYALTY_REPORT_ALL_TABS');
 ```
 
 ## Step 5: Update any dimensions
@@ -71,7 +72,7 @@ WITH VERSIONS AS (
     SELECT 
         ISBN, 
         TITLE
-    FROM INAUD.ROYALTY_REPORT_ALL_TABS I 
+    FROM SPOT.ROYALTY_REPORT_ALL_TABS I 
     LEFT JOIN CONFIG.BOOK_VERSIONS BV ON I.ISBN = BV.BOOK_VERSION_UNIQUE_ID
     WHERE BV.BOOK_VERSION_UNIQUE_ID IS NULL
     GROUP BY ALL 
