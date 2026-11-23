@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-S3_DEST="s3://connors-misc-blob-for-blobs/books/spot/excel_stage/"
+S3_DEST="s3://connors-misc-blob-for-blobs/books/spot/royalty/excel_stage/"
 
 if [[ $# -ne 1 ]]; then
 	echo "Usage: $0 <file-path>" >&2
