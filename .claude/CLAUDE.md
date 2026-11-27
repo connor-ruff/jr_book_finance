@@ -40,6 +40,5 @@ Next.js 15 app router. All dashboard pages live under `app/(dashboard)/` and req
 
 # Helpers Info
 
-Each source has a README.md that describes the manual process that goes into refresh data:
-- `refresh_helpers/kdp/README.md`
-- `refresh_helpers/acx/README.md`
+A single README describes the manual process that goes into refreshing data for every source (download, upload to S3, run the `CONFIG` copy/merge procs, rebuild reports):
+- `refresh_helpers/README.md`

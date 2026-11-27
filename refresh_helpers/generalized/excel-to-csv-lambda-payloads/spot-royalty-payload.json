@@ -1,9 +1,0 @@
-{
-  "source_bucket": "connors-misc-blob-for-blobs",
-  "source_key": "books/spot/royalty/excel_stage/",
-  "exclude_sheet_names": "Summary",
-  "dest_bucket": "connors-misc-blob-for-blobs",
-  "dest_folder": "books/spot/royalty/csv_stage/",
-  "processing_type": "whole-folder",
-  "move_after_operation": true
-}
