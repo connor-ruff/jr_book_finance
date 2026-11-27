@@ -249,7 +249,35 @@ FROM VERSIONS
 ORDER BY 1,2;
 ```
 
-KDP, Spotify listeners and IngramSpark have no dimension query documented here; any missing entries are flagged by the report-build checks in Step 6.
+**IngramSpark** (matches on `ISBN_13`; `title_versions` > 1 means the same ISBN appears under more than one title)
+
+```sql
+WITH IDS AS (
+    SELECT ISBN_13, TITLE FROM IG.WHOLESALE_POD_USD GROUP BY ALL
+    UNION ALL
+    SELECT ISBN_13, TITLE FROM IG.WHOLESALE_POD_AUD GROUP BY ALL
+    UNION ALL
+    SELECT ISBN_13, TITLE FROM IG.WHOLESALE_POD_GBP GROUP BY ALL
+    UNION ALL
+    SELECT ISBN_13, TITLE FROM IG.GLOBAL_CONNECT GROUP BY ALL
+),
+CONDENSED AS (
+    SELECT
+        ISBN_13,
+        TITLE, 
+        COUNT(DISTINCT TITLE) OVER (PARTITION BY ISBN_13) AS title_versions
+    FROM IDS
+    GROUP BY ISBN_13, TITLE
+)
+SELECT C.*
+FROM CONDENSED C
+LEFT JOIN CONFIG.BOOK_VERSIONS BV
+    ON C.ISBN_13 = BV.BOOK_VERSION_UNIQUE_ID
+WHERE BV.BOOK_VERSION_UNIQUE_ID IS NULL
+ORDER BY 1;
+```
+
+KDP and Spotify listeners have no dimension query documented here; any missing entries are flagged by the report-build checks in Step 6.
 
 ## Step 6: Build All Reports
 
