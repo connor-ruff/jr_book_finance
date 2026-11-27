@@ -16,7 +16,10 @@ const navItems = [
   {
     label: 'Config',
     href: '/config',
-    children: [{ label: 'Summary', href: '/config/summary' }],
+    children: [
+      { label: 'Summary', href: '/config/summary' },
+      { label: 'Refresh Monitor', href: '/config/refresh' },
+    ],
   },
 ];
 

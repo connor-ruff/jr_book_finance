@@ -7,6 +7,7 @@ import type {
   ConfigForexRate,
   ConfigKenpRate,
   ConfigMarketplace,
+  ConfigRefreshStatus,
   ConfigSourceTableInfo,
 } from '@/lib/types/config';
 
@@ -146,5 +147,22 @@ export async function getConfigAuditDpRuns(): Promise<ConfigAuditDpRun[]> {
     startDt: toStr(r.START_DT),
     endDt: r.END_DT == null ? null : toStr(r.END_DT),
     status: toStr(r.STATUS),
+  }));
+}
+
+function toIso(v: unknown): string | null {
+  if (v == null) return null;
+  return v instanceof Date ? v.toISOString() : String(v);
+}
+
+export async function getConfigRefreshDashboard(): Promise<ConfigRefreshStatus[]> {
+  const rows = await execute<Record<string, unknown>>(
+    `SELECT SOURCE, LATEST_DATA_AVAILABLE, LATEST_LOAD_TIMESTAMP
+     FROM CONFIG.REFRESH_DASHBOARD`,
+  );
+  return rows.map((r) => ({
+    source: toStr(r.SOURCE),
+    latestDataAvailable: toIso(r.LATEST_DATA_AVAILABLE)?.slice(0, 10) ?? null,
+    latestLoadTimestamp: toIso(r.LATEST_LOAD_TIMESTAMP),
   }));
 }

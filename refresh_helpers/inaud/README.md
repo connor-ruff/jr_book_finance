@@ -53,7 +53,7 @@ cd refresh_helpers/inaud
     - Review `response.json`
 
 
-## Step 4: Trigger the Snowflake Pipeline Through the ACX Layer
+## Step 4: Trigger the Snowflake Pipeline Through the Inaud Layer
 
 ```sql
 USE ROLE BOOKS_ADMIN;

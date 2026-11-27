@@ -70,3 +70,9 @@ export type ConfigSummary = {
   kenpRates: ConfigKenpRate[];
   forexRates: ConfigForexRate[];
 };
+
+export type ConfigRefreshStatus = {
+  source: string;
+  latestDataAvailable: string | null;
+  latestLoadTimestamp: string | null;
+};

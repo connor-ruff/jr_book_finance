@@ -5,8 +5,8 @@ Earnings reports can be downloaded one month at a time.
 Typically, a month's file is made available 2-3 months after a month ends
 Our refresh methodology is:
 
-- Download not-yet-loaded earnings files from InAudio
-- For all source month that have been staged to load, completely delete that source month from the InAudio tables
+- Download not-yet-loaded earnings files from Spotify
+- For all source month that have been staged to load, completely delete that source month from the Spotify tables
     - Since we only want to download/stage NEW files, no deletes should every truly happen, but this check makes the operation safer by preventing double-loading if we accidentally stage/load a file that's already been loaded
 - Insert data from new batch
 
@@ -53,7 +53,7 @@ cd refresh_helpers/spot
     - Review `response.json`
 
 
-## Step 4: Trigger the Snowflake Pipeline Through the ACX Layer
+## Step 4: Trigger the Snowflake Pipeline Through the Spotify Layer
 
 ```sql
 USE ROLE BOOKS_ADMIN;
