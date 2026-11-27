@@ -18,11 +18,15 @@ Both are driven by config tables (`CONFIG.SOURCE_TABLE_INFO` and `CONFIG.CROSSWA
 | Spotify royalty | `spot-royalty` | Yes | `RAW.SPOT_ROYALTY_REPORT_ALL_TABS_STAGE` | `SPOT.ROYALTY_REPORT_ALL_TABS` | `DP_SOURCE_FILE_MONTH` (from file name) |
 | Spotify listeners (monthly) | `spot-listeners-monthly` | No (already CSV) | `RAW.SPOT_LISTENER_MONTHLY_REPORT_STAGE` | `SPOT.LISTENER_MONTHLY_REPORT` | `DP_SOURCE_FILE_MONTH` (from file name) |
 | Spotify listeners (weekly) | `spot-listeners-weekly` | No (already CSV) | `RAW.SPOT_LISTENER_WEEKLY_REPORT_STAGE` | `SPOT.LISTENER_WEEKLY_REPORT` | `DP_SOURCE_FILE_BEGIN_DATE` (from file name) |
-| IngramSpark | _not wired up yet_ | - | `RAW.IG_*_STAGE` | `IG.*` | _in development_ |
+| IngramSpark - Wholesale POD (USD) | `ig-usd` | No (tab-delimited text) | `RAW.IG_WHOLESALE_POD_USD_STAGE` | `IG.WHOLESALE_POD_USD` | `DP_SOURCE_FILE_MONTH` (from `period_name` column) |
+| IngramSpark - Wholesale POD (AUD) | `ig-aud` | No (tab-delimited text) | `RAW.IG_WHOLESALE_POD_AUD_STAGE` | `IG.WHOLESALE_POD_AUD` | `DP_SOURCE_FILE_MONTH` (from `period_name` column) |
+| IngramSpark - Wholesale POD (GBP) | `ig-gbp` | No (tab-delimited text) | `RAW.IG_WHOLESALE_POD_GBP_STAGE` | `IG.WHOLESALE_POD_GBP` | `DP_SOURCE_FILE_MONTH` (from `period_name` column) |
+| IngramSpark - Global Connect (USD) | `ig-global` | No (tab-delimited text) | `RAW.IG_GLOBAL_CONNECT_STAGE` | `IG.GLOBAL_CONNECT` | `DP_SOURCE_FILE_MONTH` (from `period_name` column) |
 
-**Important - file names matter.** For every source except KDP, the month (or week) a file belongs to is parsed out of the
+**Important - file names matter.** For every source except KDP and IngramSpark, the month (or week) a file belongs to is parsed out of the
 file name with a regex (defined in `CONFIG.CROSSWALK.CUSTOM_TRANSFORMATION_LOGIC`). **Do not rename files after downloading them.**
 If a name can't be parsed, the merge fails before anything in the target table is changed.
+(IngramSpark is the exception: its month comes from the `period_name` column inside the file, e.g. `'JAN-26`. Still, keep the original file names.)
 
 ## The Refresh Methodology (same for every source)
 
@@ -55,6 +59,7 @@ SELECT MAX(DP_SOURCE_FILE_MONTH)        FROM INAUD.ROYALTY_REPORT_ALL_TABS; -- I
 SELECT MAX(DP_SOURCE_FILE_MONTH)        FROM SPOT.ROYALTY_REPORT_ALL_TABS;  -- Spotify royalty
 SELECT MAX(DP_SOURCE_FILE_MONTH)        FROM SPOT.LISTENER_MONTHLY_REPORT;  -- Spotify listeners (monthly)
 SELECT MAX(DP_SOURCE_FILE_END_DATE)     FROM SPOT.LISTENER_WEEKLY_REPORT;   -- Spotify listeners (weekly)
+SELECT MAX(DP_SOURCE_FILE_MONTH)        FROM IG.WHOLESALE_POD_USD;          -- IngramSpark (same pattern for IG.WHOLESALE_POD_AUD / _GBP / IG.GLOBAL_CONNECT)
 ```
 
 ## Step 2: Download the Reports
@@ -68,6 +73,7 @@ Download all not-yet-loaded reports, **without renaming them**, into your `~/Dow
 | InAudio | https://voices.inaudio.com/reporting/royalty-reports -> "Royalty Reports" | Monthly; typically available 2-3 months after month end. |
 | Spotify royalty | Spotify Authors -> "Royalty Reports" | Monthly; typically available 2-3 months after month end. |
 | Spotify listeners | Spotify Authors -> "Spotify Insights" | Monthly and weekly files, available a few days after the period ends. These are already CSV. |
+| IngramSpark | IngramSpark compensation reports | Monthly. Four files per month: `WholesalePODCompensationUSD-<MON>-<YY>.xls`, `WholesalePODCompensationAUD-...`, `WholesalePODCompensationGBP-...`, and `GlobalConnectCompensationUSD-...`. Despite the `.xls` extension these are **tab-delimited text files**, not Excel. Leave them as downloaded. |
 
 ## Step 3: Push Files to S3
 
@@ -84,8 +90,10 @@ cd refresh_helpers
    the files and asks for confirmation first), so make sure only the files for ONE source are in `~/Downloads` at a time:
 
 ```bash
-./upload-all-from-downloads.sh <kdp|acx|inaud|spot-royalty|spot-listeners-monthly|spot-listeners-weekly>
+./upload-all-from-downloads.sh <kdp|acx|inaud|spot-royalty|spot-listeners-monthly|spot-listeners-weekly|ig-usd|ig-aud|ig-gbp|ig-global>
 ```
+
+   For IngramSpark, upload each of the four report types separately (put only the USD wholesale files in `~/Downloads`, run `ig-usd`, and so on).
 
 3. **Excel sources only** (`kdp`, `acx`, `inaud`, `spot-royalty`): trigger the lambda that converts the uploaded Excel files to CSV
    (it processes the whole `excel_stage/` folder, writes to the source's `csv_stage/`, and moves the processed Excel files):
@@ -96,7 +104,7 @@ cd refresh_helpers
 
 Check the printed response for errors. (Payloads, including which sheets are converted, are in `excel-to-csv-lambda-payloads/`.)
 
-Spotify listener files are already CSV and are uploaded straight to their `csv_stage/`, so they skip the lambda.
+Spotify listener files and IngramSpark files skip the lambda: Spotify's are already CSV, and IngramSpark's `.xls` files are really tab-delimited text (they load with the `CONFIG.TSV_SKIP_HEADER` file format). Both are uploaded straight to their `csv_stage/`.
 
 S3 locations (bucket `connors-misc-blob-for-blobs`):
 
@@ -108,6 +116,10 @@ S3 locations (bucket `connors-misc-blob-for-blobs`):
 | Spotify royalty | `books/spot/royalty/excel_stage/` | `books/spot/royalty/csv_stage/` |
 | Spotify listeners (monthly) | - | `books/spot/monthly_listeners/csv_stage/` |
 | Spotify listeners (weekly) | - | `books/spot/weekly_listeners/csv_stage/` |
+| IngramSpark Wholesale POD (USD) | - | `books/ig/wholesale_pod_usd/csv_stage/` |
+| IngramSpark Wholesale POD (AUD) | - | `books/ig/wholesale_pod_aud/csv_stage/` |
+| IngramSpark Wholesale POD (GBP) | - | `books/ig/wholesale_pod_gbp/csv_stage/` |
+| IngramSpark Global Connect (USD) | - | `books/ig/global_connect/csv_stage/` |
 
 ## Step 4: Run the Snowflake Pipeline
 
@@ -147,12 +159,22 @@ CALL CONFIG.COPY_S3_TO_RAW_GENERAL('RAW.SPOT_LISTENER_MONTHLY_REPORT_STAGE');
 CALL CONFIG.COPY_S3_TO_RAW_GENERAL('RAW.SPOT_LISTENER_WEEKLY_REPORT_STAGE');
 CALL CONFIG.MERGE_RAW_TO_FINAL_GENERAL('SPOT.LISTENER_MONTHLY_REPORT');
 CALL CONFIG.MERGE_RAW_TO_FINAL_GENERAL('SPOT.LISTENER_WEEKLY_REPORT');
+
+-- IngramSpark
+CALL CONFIG.COPY_S3_TO_RAW_GENERAL('RAW.IG_WHOLESALE_POD_USD_STAGE');
+CALL CONFIG.COPY_S3_TO_RAW_GENERAL('RAW.IG_WHOLESALE_POD_AUD_STAGE');
+CALL CONFIG.COPY_S3_TO_RAW_GENERAL('RAW.IG_WHOLESALE_POD_GBP_STAGE');
+CALL CONFIG.COPY_S3_TO_RAW_GENERAL('RAW.IG_GLOBAL_CONNECT_STAGE');
+CALL CONFIG.MERGE_RAW_TO_FINAL_GENERAL('IG.WHOLESALE_POD_USD');
+CALL CONFIG.MERGE_RAW_TO_FINAL_GENERAL('IG.WHOLESALE_POD_AUD');
+CALL CONFIG.MERGE_RAW_TO_FINAL_GENERAL('IG.WHOLESALE_POD_GBP');
+CALL CONFIG.MERGE_RAW_TO_FINAL_GENERAL('IG.GLOBAL_CONNECT');
 ```
 
 The exact calls for every source are also stored in `CONFIG.SOURCE_TABLE_INFO` (`COPY_TO_S3_PROC_CALL` / `MERGE_TO_TARGET_PROC_CALL`).
 
 If a merge returns an `ERROR`, nothing was changed in the target table. The usual causes are a renamed file (can't parse the month/week),
-or a value that doesn't convert to the target column's type. Fix the file or the crosswalk, then re-run the `COPY` + `MERGE`.
+or a value that doesn't convert to the target column's type. (Blank or whitespace-only numeric/date cells are treated as NULL, not errors.) Fix the file or the crosswalk, then re-run the `COPY` + `MERGE`.
 
 ## Step 5: Update Any Dimensions
 
@@ -227,7 +249,7 @@ FROM VERSIONS
 ORDER BY 1,2;
 ```
 
-KDP and Spotify listeners have no dimension step beyond what the report-build checks flag.
+KDP, Spotify listeners and IngramSpark have no dimension query documented here; any missing entries are flagged by the report-build checks in Step 6.
 
 ## Step 6: Build All Reports
 
