@@ -47,6 +47,15 @@ function ago(days: number | null): string {
   return days === 1 ? '1 day ago' : `${days} days ago`;
 }
 
+// Show just the host (e.g. "kdpreports.amazon.com"), not the full URL
+function linkLabel(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return 'Open';
+  }
+}
+
 const Th = ({ children }: { children: React.ReactNode }) => (
   <th className="whitespace-nowrap border-b border-slate-200 bg-slate-50 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
     {children}
@@ -93,6 +102,7 @@ export default function RefreshMonitorPage() {
                 <Th>Last Loaded</Th>
                 <Th>Load Age</Th>
                 <Th>Status</Th>
+                <Th>Link</Th>
               </tr>
             </thead>
             <tbody>
@@ -109,6 +119,21 @@ export default function RefreshMonitorPage() {
                       <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${st.cls}`}>
                         {st.label}
                       </span>
+                    </Td>
+                    <Td>
+                      {r.url ? (
+                        <a
+                          href={r.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          title={r.url}
+                          className="text-blue-600 underline hover:text-blue-800"
+                        >
+                          {linkLabel(r.url)} ↗
+                        </a>
+                      ) : (
+                        '—'
+                      )}
                     </Td>
                   </tr>
                 );

@@ -157,12 +157,13 @@ function toIso(v: unknown): string | null {
 
 export async function getConfigRefreshDashboard(): Promise<ConfigRefreshStatus[]> {
   const rows = await execute<Record<string, unknown>>(
-    `SELECT SOURCE, LATEST_DATA_AVAILABLE, LATEST_LOAD_TIMESTAMP
+    `SELECT SOURCE, LATEST_DATA_AVAILABLE, LATEST_LOAD_TIMESTAMP, URL
      FROM CONFIG.REFRESH_DASHBOARD`,
   );
   return rows.map((r) => ({
     source: toStr(r.SOURCE),
     latestDataAvailable: toIso(r.LATEST_DATA_AVAILABLE)?.slice(0, 10) ?? null,
     latestLoadTimestamp: toIso(r.LATEST_LOAD_TIMESTAMP),
+    url: r.URL == null ? null : toStr(r.URL),
   }));
 }

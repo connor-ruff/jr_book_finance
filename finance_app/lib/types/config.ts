@@ -75,4 +75,5 @@ export type ConfigRefreshStatus = {
   source: string;
   latestDataAvailable: string | null;
   latestLoadTimestamp: string | null;
+  url: string | null;
 };
