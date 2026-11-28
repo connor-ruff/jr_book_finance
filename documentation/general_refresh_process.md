@@ -12,6 +12,7 @@ This is the process that applies to **every** data source. Anything that differs
 | Spotify royalty | [sources/spotify_royalty.md](sources/spotify_royalty.md) | `spot-royalty` | Yes |
 | Spotify listeners | [sources/spotify_listeners.md](sources/spotify_listeners.md) | `spot-listeners-monthly`, `spot-listeners-weekly` | No (already CSV) |
 | IngramSpark | [sources/ingramspark.md](sources/ingramspark.md) | `ig-usd`, `ig-aud`, `ig-gbp`, `ig-global` | No (tab-delimited text) |
+| Kobo (in progress) | [sources/kobo.md](sources/kobo.md) | `kobo-sales`, `kobo-membership` | Yes |
 
 ## The Steps
 
@@ -73,10 +74,10 @@ All commands run from the `refresh_helpers/` folder.
 
    Valid arguments: `kdp`, `acx`, `inaud`, `spot-royalty`, `spot-listeners-monthly`, `spot-listeners-weekly`, `ig-usd`, `ig-aud`, `ig-gbp`, `ig-global`.
 
-3. **Excel sources only** (KDP, ACX, InAudio, Spotify royalty): trigger the lambda that converts the uploaded Excel files to CSV. It processes the whole `excel_stage/` folder, writes to the source's `csv_stage/`, and moves the processed Excel files into a `processed/` folder:
+3. **Excel sources only** (KDP, ACX, InAudio, Spotify royalty, Kobo): trigger the lambda that converts the uploaded Excel files to CSV. It processes the whole `excel_stage/` folder, writes to the source's `csv_stage/`, and moves the processed Excel files into a `processed/` folder:
 
    ```bash
-   ./invoke-csv-converter-lambda.sh <kdp|acx|inaud|spot-royalty>
+   ./invoke-csv-converter-lambda.sh <kdp|acx|inaud|spot-royalty|kobo-sales|kobo-membership>
    ```
 
    Check the printed response for errors. The payloads (including which sheets are converted) are in `refresh_helpers/excel-to-csv-lambda-payloads/`.

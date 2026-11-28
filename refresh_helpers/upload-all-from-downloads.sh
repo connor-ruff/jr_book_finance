@@ -2,7 +2,7 @@
 # Upload every file in ~/Downloads to the stage for a given source.
 # Excel sources go to the excel stage (the csv-converter lambda handles them next);
 # Spotify listener reports are already CSV, so they go straight to the csv stage.
-# Usage: ./upload-all-from-downloads.sh <kdp|acx|inaud|spot-royalty|spot-listeners-monthly|spot-listeners-weekly|ig-usd|ig-aud|ig-gbp|ig-global>
+# Usage: ./upload-all-from-downloads.sh <kdp|acx|inaud|spot-royalty|spot-listeners-monthly|spot-listeners-weekly|ig-usd|ig-aud|ig-gbp|ig-global|kobo-sales|kobo-membership>
 
 set -euo pipefail
 
@@ -23,8 +23,10 @@ case "${1:-}" in
 	ig-aud)       PREFIX="books/ig/wholesale_pod_aud/csv_stage/" ;;
 	ig-gbp)       PREFIX="books/ig/wholesale_pod_gbp/csv_stage/" ;;
 	ig-global)    PREFIX="books/ig/global_connect/csv_stage/" ;;
+	kobo-sales)      PREFIX="books/kobo/book_sales/excel_stage/" ;;
+	kobo-membership) PREFIX="books/kobo/membership_revenue/excel_stage/" ;;
 	*)
-		echo "Usage: $0 <kdp|acx|inaud|spot-royalty|spot-listeners-monthly|spot-listeners-weekly|ig-usd|ig-aud|ig-gbp|ig-global>" >&2
+		echo "Usage: $0 <kdp|acx|inaud|spot-royalty|spot-listeners-monthly|spot-listeners-weekly|ig-usd|ig-aud|ig-gbp|ig-global|kobo-sales|kobo-membership>" >&2
 		exit 1
 		;;
 esac

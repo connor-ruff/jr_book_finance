@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Invoke the excel-to-csv lambda for a given source, using its payload in
 # excel-to-csv-lambda-payloads/.
-# Usage: ./invoke-csv-converter-lambda.sh <kdp|acx|inaud|spot-royalty>
+# Usage: ./invoke-csv-converter-lambda.sh <kdp|acx|inaud|spot-royalty|kobo-sales|kobo-membership>
 
 set -euo pipefail
 

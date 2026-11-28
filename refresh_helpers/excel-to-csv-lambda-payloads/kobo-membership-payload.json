@@ -1,0 +1,9 @@
+{
+  "source_bucket": "connors-misc-blob-for-blobs",
+  "source_key": "books/kobo/membership_revenue/excel_stage/",
+  "include_sheet_names": "Details",
+  "dest_bucket": "connors-misc-blob-for-blobs",
+  "dest_folder": "books/kobo/membership_revenue/csv_stage/",
+  "processing_type": "whole-folder",
+  "move_after_operation": true
+}
