@@ -9,7 +9,6 @@ export type DailySaleRow = {
   royaltyDate: string;
   royaltyUsd: number;
   netUnitsSold: number;
-  pageReads: number;
 };
 
 export type DailySalesResponse = {

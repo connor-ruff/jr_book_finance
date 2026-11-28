@@ -12,7 +12,6 @@ type RawDailyRow = {
   ROYALTY_DATE: string | Date;
   ROYALTY_IN_USD: number | string | null;
   NET_UNITS_SOLD: number | string | null;
-  PAGE_READS: number | string | null;
 };
 
 function toIsoDate(value: string | Date): string {
@@ -38,8 +37,7 @@ export async function getDailySales(opts: {
       MARKETPLACE,
       ROYALTY_DATE,
       ROYALTY_IN_USD,
-      NET_UNITS_SOLD,
-      PAGE_READS
+      NET_UNITS_SOLD
     FROM RPT.DAILY_SALES_REPORT
     WHERE ROYALTY_DATE BETWEEN TO_DATE(:1) AND TO_DATE(:2)
     ORDER BY ROYALTY_DATE ASC
@@ -58,6 +56,5 @@ export async function getDailySales(opts: {
     royaltyDate: toIsoDate(r.ROYALTY_DATE),
     royaltyUsd: toNumber(r.ROYALTY_IN_USD),
     netUnitsSold: toNumber(r.NET_UNITS_SOLD),
-    pageReads: toNumber(r.PAGE_READS),
   }));
 }

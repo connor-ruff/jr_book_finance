@@ -81,10 +81,9 @@ export default function TotalRoyaltyPage() {
         (acc, r) => {
           acc.royalty += r.royaltyUsd;
           acc.units += r.netUnitsSold;
-          acc.pageReads += r.pageReads;
           return acc;
         },
-        { royalty: 0, units: 0, pageReads: 0 },
+        { royalty: 0, units: 0 },
       ),
     [filtered],
   );
@@ -177,7 +176,7 @@ export default function TotalRoyaltyPage() {
         </div>
       </Card>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Card>
           <Text>Royalty (USD)</Text>
           <Metric>{isLoading ? '—' : fmtUSD(totals.royalty)}</Metric>
@@ -185,10 +184,6 @@ export default function TotalRoyaltyPage() {
         <Card>
           <Text>Net units sold</Text>
           <Metric>{isLoading ? '—' : fmtNum(totals.units)}</Metric>
-        </Card>
-        <Card>
-          <Text>Page reads</Text>
-          <Metric>{isLoading ? '—' : fmtNum(totals.pageReads)}</Metric>
         </Card>
       </div>
 

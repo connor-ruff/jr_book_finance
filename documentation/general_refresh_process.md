@@ -12,7 +12,7 @@ This is the process that applies to **every** data source. Anything that differs
 | Spotify royalty | [sources/spotify_royalty.md](sources/spotify_royalty.md) | `spot-royalty` | Yes |
 | Spotify listeners | [sources/spotify_listeners.md](sources/spotify_listeners.md) | `spot-listeners-monthly`, `spot-listeners-weekly` | No (already CSV) |
 | IngramSpark | [sources/ingramspark.md](sources/ingramspark.md) | `ig-usd`, `ig-aud`, `ig-gbp`, `ig-global` | No (tab-delimited text) |
-| Kobo (in progress) | [sources/kobo.md](sources/kobo.md) | `kobo-sales`, `kobo-membership` | Yes |
+| Kobo | [sources/kobo.md](sources/kobo.md) | `kobo-sales`, `kobo-membership` | Yes |
 
 ## The Steps
 
